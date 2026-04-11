@@ -15,6 +15,29 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.
 ### Fixed
 - Corrección de bugs menores en el manejo de errores
 
+## [0.3.0] - 2026-04-11
+
+### Added
+- 📚 **Documentación profesional completa**
+  - README.md mejorado con badges, arquitectura, ejemplos
+  - Guía de contribución (CONTRIBUTING.md)
+  - CHANGELOG.md detallado con formato estándar
+  - .env.example ampliado con todas las configuraciones
+  - .gitignore mejorado para desarrollo completo
+- 🎨 **Mejoras en UX/UI**
+  - Badges de estado en README
+  - Enlaces a documentación y soporte
+  - Ejemplos de código más claros
+- 🔧 **Configuración mejorada**
+  - Variables de entorno documentadas
+  - Guías de instalación paso a paso
+  - Configuración de desarrollo optimizada
+
+### Changed
+- README.md completamente reescrito para profesionalismo
+- Estructura de documentación estandarizada
+- Configuración de entorno más detallada
+
 ## [0.2.0] - 2026-04-11
 
 ### Added
