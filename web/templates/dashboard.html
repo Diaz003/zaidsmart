@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel local de agentes IA">
+  <title>🧠 ZAIDSMART — Panel</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body class="vs-mobile-layout">
+  <div id="mobile-overlay" class="mobile-overlay"></div>
+  <div class="vs-layout">
+    <!-- Sidebar / Activity Bar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>PROYECTOS</h2>
+        <button id="btn-new-project" class="icon-btn" title="Nuevo Proyecto">+</button>
+      </div>
+      
+      <div id="projects-list" class="projects-list">
+        <p class="empty-msg-small">Cargando...</p>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="active-brains-panel">
+          <div class="panel-header">
+            <h3>⚡ CEREBROS ACTIVOS</h3>
+            <button id="btn-refresh-models" class="refresh-mini" title="Escanear OpenRouter">🔄</button>
+          </div>
+          <div id="active-brains-list" class="mini-list">
+            <span class="scanning-text">Escaneando red...</span>
+          </div>
+        </div>
+
+        <!-- Se eliminó la zona de peligro de aquí para evitar saltos en móvil -->
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="btn-mobile-menu" class="mobile-menu-btn" title="Menú">☰</button>
+          <h1 class="header__title" style="background: linear-gradient(135deg, #ef4444, #f59e0b, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0;">🧠 ZAIDSMART</h1>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span id="current-project-badge" class="badge badge--queued" style="display:none;"></span>
+          <button id="btn-delete-project" class="btn-danger-mini" style="display:none;" title="Borrar Proyecto">🗑️</button>
+        </div>
+      </header>
+
+      <div id="no-project-view" class="view-state">
+        <div class="welcome-box">
+          <h2>Selecciona o crea un proyecto</h2>
+          <p class="text-muted" style="margin-top: 10px;">Crea un proyecto en la barra lateral para empezar a lanzar tareas. Cada proyecto mantiene su propio historial y genera archivos en carpetas separadas.</p>
+          <button id="btn-create-first" class="btn-primary" style="max-width: 250px; margin-top: 24px;">+ Crear Proyecto</button>
+        </div>
+      </div>
+
+      <div id="project-view" class="view-state" style="display: none;">
+        <div class="grid">
+          <!-- Left: New Task Form -->
+          <section class="card" id="form-section">
+            <h2 class="card__title">Nueva tarea</h2>
+            
+            <div class="form-group">
+              <label class="form-label" for="agent-select">Roles de Agente</label>
+              <select class="form-select" id="agent-select">
+                <option value="manager">👑 Manager — Jefe (Delega trabajo automáticamente)</option>
+                <option value="readme">📝 Readme — Especialista en Documentación</option>
+                <option value="godot">🎮 Godot — Desarrollador Experto</option>
+                <option value="assets">🎨 Assets — Gestor de Recursos 2D/3D</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="model-select">Asignar Cerebro (LLM)</label>
+              <select class="form-select" id="model-select">
+                <option value="openrouter/free">Cargando modelos...</option>
+              </select>
+              <p class="model-hint" id="model-info-text">Selecciona un modelo capaz para el rol.</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="task-desc">Descripción / Orden</label>
+              <textarea class="form-textarea" id="task-desc" placeholder="Ej: Necesito crear un GDD de un juego estilo Hitman con gráficos pixel art."></textarea>
+            </div>
+
+            <button class="btn-primary" id="create-btn">🚀 Lanzar tarea</button>
+            <p class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> para enviar</p>
+            <p class="form-msg" id="create-msg"></p>
+          </section>
+
+          <!-- Right: Task List & Terminal -->
+          <section class="card" id="tasks-section" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+              <h2 class="card__title" style="margin:0;">Ejecuciones</h2>
+            </div>
+            
+            <div id="tasks-list">
+              <p class="empty-msg">Sin actividad reciente.</p>
+            </div>
+
+            <!-- Terminal overlay effect when running -->
+            <div id="system-terminal" class="system-terminal">
+              <div class="terminal-header">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                <span class="terminal-title">ZAIDSMART_SYSTEM_LOGS</span>
+              </div>
+              <div id="terminal-content" class="terminal-body">
+                > Sistema listo para operar...
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

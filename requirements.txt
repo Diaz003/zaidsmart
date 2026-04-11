@@ -1,0 +1,11 @@
+crewai>=0.28.0
+fastapi
+uvicorn[standard]
+openai
+requests
+beautifulsoup4
+rich
+python-dotenv
+aiofiles
+jinja2
+aiosqlite
