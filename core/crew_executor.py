@@ -20,16 +20,20 @@ except ImportError:
 def run_crew_task(runner, task_id, project_id, agent_name, model_id, description):
     runner.update_task(task_id, "running", logs="Iniciando tarea...")
     
-    # Lista extendida de modelos gratuitos estables y comprobados en OpenRouter (evitando los 404/400)
-    models_to_try = [
-        model_id, 
-        "google/gemini-2.0-flash-lite:free",
-        "google/gemini-flash-1.5-8b:free",
-        "meta-llama/llama-3.1-8b-instruct:free",
-        "nousresearch/hermes-3-llama-3.1-405b:free"
-    ]
-    # Eliminar duplicados manteniendo el orden
-    models_to_try = list(dict.fromkeys(models_to_try))
+    # Obtener modelos realmente disponibles y compatibles (con tools) desde el escaneo de OpenRouter
+    from api.main import _cached_models
+    available_models = [m for m in _cached_models if m.get("supports_tools")]
+    # Si el usuario eligió un modelo específico, ponerlo primero
+    models_to_try = []
+    if model_id and model_id != "openrouter/free":
+        models_to_try.append(model_id)
+    # Añadir todos los modelos gratuitos compatibles (sin duplicados)
+    models_to_try += [m["id"] for m in available_models if m["id"] not in models_to_try]
+    # Si no hay modelos compatibles, abortar con error claro
+    if not models_to_try:
+        err_msg = "No hay modelos gratuitos compatibles con herramientas disponibles en OpenRouter. Intenta más tarde o añade saldo en OpenRouter."
+        runner.update_task(task_id, "error", result=err_msg)
+        return
     
     last_exc = None
     result_text = None
