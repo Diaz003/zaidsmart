@@ -173,7 +173,7 @@ def run_crew_task(runner, task_id, project_id, agent_name, model_id, description
         runner.update_task(task_id, "error", result=err_msg)
         return
     else:
-        result_text += summary
+                                                    crew = Crew(agents=workers, tasks=[task], process=Process.hierarchical, manager_agent=manager, verbose=True)
 
     try:
         
