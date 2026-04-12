@@ -313,7 +313,28 @@ function renderTasks(tasks) {
       
       ${latestLog ? `<div class="progress-indicator ${isDelegating ? 'delegate-glow' : ''}"><span class="spinner">⚙️</span> <i>${esc(latestLog)}</i></div>` : ""}
 
-      ${t.result ? `<details class="task-details details-result" ${state.result ? "open" : ""}><summary>Resultado Final</summary><pre>${esc(t.result)}</pre></details>` : ""}
+      ${t.result ? highlightModelSummary(t.result, state.result) : ""}
+      // Resalta el resumen de modelos probados en el resultado final
+      function highlightModelSummary(resultText, isOpen) {
+        // Busca el bloque de resumen generado por backend
+        const summaryRegex = /---\\n<b>Resumen de modelos probados:<\\/b>\\n([\s\S]*)$/;
+        const match = resultText.match(summaryRegex);
+        let mainResult = resultText;
+        let summaryBlock = "";
+        if (match) {
+          mainResult = resultText.slice(0, match.index).trim();
+          summaryBlock = match[1]
+            .split("\n")
+            .filter(Boolean)
+            .map(line => `<li>${esc(line)}</li>`)
+            .join("");
+        }
+        return `<details class="task-details details-result" ${isOpen ? "open" : ""}>
+          <summary>Resultado Final</summary>
+          <pre>${esc(mainResult)}</pre>
+          ${summaryBlock ? `<div class="model-summary-block"><b>Resumen de modelos probados:</b><ul>${summaryBlock}</ul></div>` : ""}
+        </details>`;
+      }
       ${t.logs ? `<details class="task-details details-logs" ${state.logs ? "open" : ""}><summary>Ver Pensamientos (Logs)</summary><pre>${esc(t.logs)}</pre></details>` : ""}
     </div>`;
   }).join("");
