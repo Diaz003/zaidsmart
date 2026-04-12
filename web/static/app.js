@@ -313,29 +313,36 @@ function renderTasks(tasks) {
       
       ${latestLog ? `<div class="progress-indicator ${isDelegating ? 'delegate-glow' : ''}"><span class="spinner">⚙️</span> <i>${esc(latestLog)}</i></div>` : ""}
 
-      ${t.result ? highlightModelSummary(t.result, state.result) : ""}
-      // Resalta el resumen de modelos probados en el resultado final
-      function highlightModelSummary(resultText, isOpen) {
-        // Busca el bloque de resumen generado por backend
-        const summaryRegex = /---\\n<b>Resumen de modelos probados:<\\/b>\\n([\s\S]*)$/;
-        const match = resultText.match(summaryRegex);
-        let mainResult = resultText;
-        let summaryBlock = "";
-        if (match) {
-          mainResult = resultText.slice(0, match.index).trim();
-          summaryBlock = match[1]
-            .split("\n")
-            .filter(Boolean)
-            .map(line => `<li>${esc(line)}</li>`)
-            .join("");
-        }
-        return `<details class="task-details details-result" ${isOpen ? "open" : ""}>
-          <summary>Resultado Final</summary>
-          <pre>${esc(mainResult)}</pre>
-          ${summaryBlock ? `<div class="model-summary-block"><b>Resumen de modelos probados:</b><ul>${summaryBlock}</ul></div>` : ""}
-        </details>`;
-      }
-      ${t.logs ? `<details class="task-details details-logs" ${state.logs ? "open" : ""}><summary>Ver Pensamientos (Logs)</summary><pre>${esc(t.logs)}</pre></details>` : ""}
+      ${t.result ? highlightModelSummary(t.result, false) : ""}
+      ${t.logs ? `<details class="task-details details-logs"><summary>Ver Pensamientos (Logs)</summary><pre>${esc(t.logs.slice(0, 2000))}${t.logs.length > 2000 ? '\n... (truncado)' : ''}</pre></details>` : ""}
+    </div>`;
+  }).join("");
+
+  previousTaskIds = new Set(tasks.map((t) => t.task_id));
+}
+
+// Resalta el resumen de modelos probados y ahorra tokens
+function highlightModelSummary(resultText, isOpen) {
+  // Busca el bloque de resumen generado por backend
+  const summaryRegex = /---\n<b>Resumen de modelos probados:<\/b>\n([\s\S]*)$/;
+  const match = resultText.match(summaryRegex);
+  let mainResult = resultText;
+  let summaryBlock = "";
+  if (match) {
+    mainResult = resultText.slice(0, match.index).trim();
+    summaryBlock = match[1]
+      .split("\n")
+      .filter(Boolean)
+      .map(line => `<li>${esc(line)}</li>`)
+      .join("");
+  }
+  // Mostrar solo el resumen por defecto, expandir resultado completo bajo demanda
+  return `<details class="task-details details-result" ${isOpen ? "open" : ""}>
+    <summary>Ver resultado y resumen de modelos</summary>
+    ${summaryBlock ? `<div class="model-summary-block"><b>Resumen de modelos probados:</b><ul>${summaryBlock}</ul></div>` : ""}
+    <details class="full-result-details"><summary>Ver resultado completo</summary><pre>${esc(mainResult.slice(0, 4000))}${mainResult.length > 4000 ? '\n... (truncado)' : ''}</pre></details>
+  </details>`;
+}
     </div>`;
   }).join("");
 

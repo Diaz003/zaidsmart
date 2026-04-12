@@ -1,5 +1,46 @@
 # ZAIDSMART
 
+Panel de agentes IA para proyectos de videojuegos y automatización.
+
+## 🚀 Inicio rápido
+
+```bash
+git clone https://github.com/Diaz003/zaidsmart.git
+cd zaidsmart
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+./start.sh
+```
+
+Accede a la interfaz web en: http://localhost:8000
+
+## 🧹 Limpieza de historial y archivos grandes
+- El repositorio ignora `.venv`, `data/`, `output/` y archivos temporales.
+- Si necesitas limpiar el historial de archivos grandes:
+    1. Instala `git-filter-repo` (`pip install git-filter-repo`)
+    2. Ejecuta:
+         ```bash
+         git filter-repo --path .venv --invert-paths
+         git filter-repo --path data --invert-paths
+         git filter-repo --path output --invert-paths
+         git push --force --all && git push --force --tags
+         ```
+
+## 🛠️ Comandos útiles
+- `./start.sh` — Inicia el backend y frontend
+- `python run_single_agent.py` — Prueba un agente aislado
+- `pytest` — Ejecuta tests
+
+## 📦 Releases y CI/CD
+- Cada tag push crea una release automática en GitHub.
+- Última versión: v1.2.0
+
+---
+
+**ZAIDSMART** © 2026 — Powered by multi-agent orchestration, FastAPI y OpenRouter
+# ZAIDSMART
+
 ![CI](https://github.com/Diaz003/zaidsmart/actions/workflows/ci.yml/badge.svg)
 [![Release](https://img.shields.io/github/v/release/Diaz003/zaidsmart?label=release)](https://github.com/Diaz003/zaidsmart/releases)
 [![License](https://img.shields.io/github/license/Diaz003/zaidsmart)](https://github.com/Diaz003/zaidsmart/blob/main/LICENSE)

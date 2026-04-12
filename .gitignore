@@ -1,3 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+
+# Archivos grandes y temporales
+.DS_Store
+data/
+output/
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# Node/Frontend
+node_modules/
+
+# Otros
+*.log
+.env
 # Entorno virtual
 .venv/
 venv/
