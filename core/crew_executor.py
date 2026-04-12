@@ -85,8 +85,7 @@ def run_crew_task(runner, task_id, project_id, agent_name, model_id, description
 
                     try:
                         runner.append_log(task_id, "Intentando modo Jerárquico (Manager)...")
-                        all_agents = [manager] + workers
-                        crew = Crew(agents=all_agents, tasks=[task], process=Process.hierarchical, manager_agent=manager, verbose=True)
+                        crew = Crew(agents=workers, tasks=[task], process=Process.hierarchical, manager_agent=manager, verbose=True)
                         runner.append_log(task_id, f"Lanzando operación con {current_model}...")
                         result = crew.kickoff()
                     except Exception as e:
@@ -97,11 +96,11 @@ def run_crew_task(runner, task_id, project_id, agent_name, model_id, description
                             runner.append_log(task_id, "⚠️ El modelo no soporta Tools. Desactivándolas y reintentando en modo SECUENCIAL...")
                             if console: console.print(f"[bold yellow]⚠️ Fallo de Tools: Forzando modo Secuencial sin herramientas...[/bold yellow]")
 
-                            for a in all_agents:
+                            for a in workers:
                                 a.tools = []
                                 a.allow_delegation = False
 
-                            crew = Crew(agents=all_agents, tasks=[task], process=Process.sequential, verbose=True)
+                            crew = Crew(agents=workers, tasks=[task], process=Process.sequential, verbose=True)
                             result = crew.kickoff()
                         else:
                             attempt_info["status"] = "exception"
